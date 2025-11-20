@@ -1,5 +1,7 @@
 # CompIQ - Payroll Management System
 
+I have used Gemini CLI tool to make this documentation
+
 CompIQ is a web application for managing employee payrolls. It provides functionalities for user authentication, payroll processing, and anomaly detection.
 
 ## Features
