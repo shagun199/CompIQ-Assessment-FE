@@ -5,6 +5,7 @@ import {
   updatePayroll,
   deletePayroll,
   calculateNetPay,
+  getPayrollAnomalies,
 } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
@@ -30,6 +31,7 @@ export default function Payroll() {
     deductions: "",
   });
   const [netResult, setNetResult] = useState(null);
+  const [anomalies, setAnomalies] = useState([]);
 
   // Fetch payrolls
   const fetchPayrolls = async () => {
@@ -40,10 +42,6 @@ export default function Payroll() {
       console.error(err);
     }
   };
-
-  useEffect(() => {
-    fetchPayrolls();
-  }, []);
 
   // Handle form submit
   const handleSubmit = async () => {
@@ -118,6 +116,20 @@ export default function Payroll() {
     }
   };
 
+  const fetchAnomalies = async () => {
+    try {
+      const res = await getPayrollAnomalies();
+      setAnomalies(res.data.anomalies);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPayrolls();
+    fetchAnomalies();
+  }, []);
+
   return (
     <div className="min-h-screen p-8 bg-gray-50">
       <div className="flex justify-between items-center mb-6">
@@ -128,6 +140,19 @@ export default function Payroll() {
         >
           Logout
         </button>
+      </div>
+
+      <div className="bg-white p-6 rounded shadow-md mt-6">
+        <h2 className="text-xl mb-4">Payroll Anomalies</h2>
+        {anomalies.length === 0 && (
+          <p className="text-gray-500">No anomalies found.</p>
+        )}
+        {anomalies.map((p) => (
+          <div key={p._id} className="border-b py-2">
+            {p.name} - {p.department} - Salary: {p.salary}, Bonus: {p.bonus},
+            Deductions: {p.deductions}
+          </div>
+        ))}
       </div>
 
       {/* Form */}
