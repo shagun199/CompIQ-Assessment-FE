@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../api/api";
 
-export default function AuthPage() {
+export default function Auth() {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +15,7 @@ export default function AuthPage() {
         const res = await loginUser({ email, password });
         localStorage.setItem("token", res.data.token);
         alert("Logged in successfully!");
+        navigate("/payroll");
       } else {
         await registerUser({ email, password, role });
         alert("Registered successfully! Please login.");
